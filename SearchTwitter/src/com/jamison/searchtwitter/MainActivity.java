@@ -5,7 +5,9 @@
 package com.jamison.searchtwitter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +28,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.database.MatrixCursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +46,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -58,7 +63,7 @@ public class MainActivity extends Activity {
 	
 	ArrayList<String[]> listIDS = null;
 	Context context = null;
-	ListView lv = null;
+	public ListView lv = null;
 	Intent intent;
 	String columnData = "";
 	
@@ -281,7 +286,7 @@ public class MainActivity extends Activity {
 	        	mCursor.addRow(new Object[] {"Twitter query failed: " + e.toString()});
 	        }
 			adapter = new MyCursorAdapter(context, mCursor);
-
+			
 	        return null;
 	    }
 
@@ -289,6 +294,7 @@ public class MainActivity extends Activity {
 	    protected void onPostExecute(String result) {
 	        lv.setAdapter(adapter);
 	        progress.setVisibility(View.GONE);
+	        
 	        // process the result
 	        super.onPostExecute(result);
 	    }

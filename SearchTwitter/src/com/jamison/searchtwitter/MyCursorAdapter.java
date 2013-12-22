@@ -9,8 +9,8 @@ import java.net.URL;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +38,8 @@ public class MyCursorAdapter extends CursorAdapter {
 		String imagefile = cursor.getString(cursor.getColumnIndex("pic"));
 		if (imagefile.length() > 0)
 		{
-			pic.setImageDrawable(GetImageFromWeb(cursor.getString(cursor.getColumnIndex("pic"))));
+			new DownloadTask().execute(pic, cursor.getString(cursor.getColumnIndex("pic")));
+			//pic.setImageDrawable(GetImageFromWeb(cursor.getString(cursor.getColumnIndex("pic"))));
 		}
 		
 		TextView user_id = (TextView)view.findViewById(R.id.user_id);
@@ -61,6 +62,28 @@ public class MyCursorAdapter extends CursorAdapter {
 	        return Drawable.createFromStream(is, "User Pic");
 	    } catch (Exception e) {
 	        return null;
+	    }
+	}
+    
+    private class DownloadTask extends AsyncTask<Object, Integer, String> {
+
+	    @Override
+	    protected String doInBackground(Object... params) {
+	    	try {
+		        InputStream is = (InputStream) new URL((String) params[1]).getContent();
+		        ImageView pic = (ImageView) params[0];
+		        pic.setImageDrawable(Drawable.createFromStream(is, "User Pic"));
+		    } catch (Exception e) {
+		        return null;
+		    }
+
+	        return null;
+	    }
+
+	    @Override
+	    protected void onPostExecute(String result) {
+	    	// process the result
+	        super.onPostExecute(result);
 	    }
 	}
 }
