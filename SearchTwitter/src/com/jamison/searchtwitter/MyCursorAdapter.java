@@ -9,6 +9,7 @@ import java.net.URL;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.widget.CursorAdapter;
@@ -39,7 +40,6 @@ public class MyCursorAdapter extends CursorAdapter {
 		if (imagefile.length() > 0)
 		{
 			new DownloadTask().execute(pic, cursor.getString(cursor.getColumnIndex("pic")));
-			//pic.setImageDrawable(GetImageFromWeb(cursor.getString(cursor.getColumnIndex("pic"))));
 		}
 		
 		TextView user_id = (TextView)view.findViewById(R.id.user_id);
@@ -55,15 +55,6 @@ public class MyCursorAdapter extends CursorAdapter {
     	final View view=mInflater.inflate(R.layout.list_item_result,parent,false); 
     	return view;
     }
-    
-    public static Drawable GetImageFromWeb (String url) {
-	    try {
-	        InputStream is = (InputStream) new URL(url).getContent();
-	        return Drawable.createFromStream(is, "User Pic");
-	    } catch (Exception e) {
-	        return null;
-	    }
-	}
     
     private class DownloadTask extends AsyncTask<Object, Integer, String> {
 

@@ -294,7 +294,6 @@ public class MainActivity extends Activity {
 	    protected void onPostExecute(String result) {
 	        lv.setAdapter(adapter);
 	        progress.setVisibility(View.GONE);
-	        
 	        // process the result
 	        super.onPostExecute(result);
 	    }
