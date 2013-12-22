@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Created By : Daniel Jamison
+ -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jamison.searchtwitter"
     android:versionCode="1"
@@ -6,8 +9,10 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="8" />
+        android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -24,5 +29,4 @@
             </intent-filter>
         </activity>
     </application>
-	<uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

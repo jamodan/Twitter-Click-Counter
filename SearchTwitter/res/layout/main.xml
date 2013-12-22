@@ -2,18 +2,11 @@
 <!--
   Created By : Daniel Jamison
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@null"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@null"
-        android:orientation="vertical" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -89,6 +82,17 @@
             android:layout_gravity="center"
             android:visibility="gone"
             />
+        
+        <TextView 
+            android:id="@+id/no_results"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:text="@string/no_results"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            />
         <ListView
             android:id="@+id/list"
             android:layout_width="fill_parent"
@@ -101,6 +105,4 @@
 
             <requestFocus />
         </ListView>
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

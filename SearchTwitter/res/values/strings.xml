@@ -5,17 +5,13 @@
 <resources>
 
     <string name="app_name">Search Twitter</string>
-    <string name="action_settings">Settings</string>
     <string name="menu_webpage">Webpage</string>
     
     <string name="imagedesc">This is an image</string>
-    <string name="search_hint">Tap to search Twitter&#8230;</string>
+    <string name="search_hint">Search Twitter</string>
+    <string name="no_results">No Tweets found</string>
     
-    <string name="intro">Enter your Twitter search term</string>
-    <string name="hint">Search Term</string>
-    <string name="search_label">Search</string>
-    <string name="placeholder">---</string>
-    
+    <!-- Twitter Key Information -->
     <string name="consumer_key">sZR4AIHWfJCvLuIaYaU2kQ</string>
     <string name="consumer_secret">rL4qvqUcnnoKTQWSYfL2fnQu0DqmmbZM6rsKK74</string>
     <string name="access_token">2252728261-VDiSaa1b88GE10i5FYf35V6GdXJqC0TDBDLjD2w</string>

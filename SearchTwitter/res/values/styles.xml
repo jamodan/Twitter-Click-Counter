@@ -1,8 +1,10 @@
+<!--
+  Created By : Daniel Jamison
+ -->
 <resources>
     <!-- Application theme. -->
     <style name="AppTheme" parent="android:Theme.NoTitleBar">
          <item name="android:windowBackground">@color/background</item>
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
 </resources>
