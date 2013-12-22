@@ -9,7 +9,7 @@
     <string name="menu_webpage">Webpage</string>
     
     <string name="imagedesc">This is an image</string>
-    <string name="search_hint">Tap to search&#8230;</string>
+    <string name="search_hint">Tap to search Twitter&#8230;</string>
     
     <string name="intro">Enter your Twitter search term</string>
     <string name="hint">Search Term</string>

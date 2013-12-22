@@ -4,23 +4,16 @@
 
 package com.jamison.searchtwitter;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import twitter4j.Query;
 import twitter4j.Status;
@@ -29,7 +22,6 @@ import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -43,11 +35,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -58,6 +52,7 @@ public class MainActivity extends Activity {
 	
     private MyCursorAdapter adapter = null;
 	private MatrixCursor mCursor = null;
+	public List<twitter4j.Status> statuses = null;
 	
 	ArrayList<String[]> listIDS = null;
 	Context context = null;
@@ -68,6 +63,7 @@ public class MainActivity extends Activity {
 	private EditText searchText=null;
 	private Button searchBtn=null;
 	private Button cancelBtn=null;
+	private ProgressBar progress=null;
 	public ConfigurationBuilder cb = new ConfigurationBuilder();
 	
 	@Override
@@ -75,9 +71,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
+		context = this;
+		
 		listIDS = new ArrayList<String[]>();
         mTwitter = getTwitter();
         
+        progress = (ProgressBar) findViewById(R.id.progress);
         searchText = (EditText) findViewById(R.id.searchText);
         // any time the user enters text into the search bar update the search and clear buttons
  		searchText.addTextChangedListener(new TextWatcher() {
@@ -113,6 +112,9 @@ public class MainActivity extends Activity {
 	    	public void onClick(View view){
 	    		if (searchText.getText().toString().length() > 0)
 	    		{
+	    			InputMethodManager imm = (InputMethodManager)getSystemService(
+	    				      Context.INPUT_METHOD_SERVICE);
+	    				imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
 	    			setupListView();
 	    		}
 	    	}
@@ -130,7 +132,7 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 			{
 				String profileURL = "https://twitter.com/" + listIDS.get(position)[1];
-				// send click info to server four counting
+				// send click info to server for counting
 				new UploadTask().execute(listIDS.get(position)[0], profileURL);
 					
 				Uri uri = Uri.parse(profileURL);
@@ -156,31 +158,14 @@ public class MainActivity extends Activity {
     	String[] allColumns = null;
     	List<Status> statuses = new ArrayList<Status>();
 		try {
-            statuses = mTwitter.search(new Query(searchText.getText().toString())).getTweets();
             listIDS.clear();
             allColumns = new String[] {	"_id", "pic", "user_id", "tweet" };
             mCursor = new MatrixCursor(allColumns);
             columnData = "";
-            int i = 1;
-            for (Status s : statuses) {
-                User tweet = s.getUser();
-                String user_pic = tweet.getProfileImageURL();
-                
-                listIDS.add(new String[] {tweet.getName(), tweet.getScreenName()});
-				
-				mCursor.addRow(new Object[] {
-						i++,
-						user_pic,
-						tweet.getName(),
-						s.getText()
-				});
-            }
+            new DownloadTask().execute();
         } catch (Exception e) {
         	mCursor.addRow(new Object[] {"Twitter query failed: " + e.toString()});
         }
-		
-		adapter = new MyCursorAdapter(this, mCursor);
-		lv.setAdapter(adapter);
 	}
 	
 	@Override
@@ -246,71 +231,44 @@ public class MainActivity extends Activity {
 	
 	private class DownloadTask extends AsyncTask<String, Integer, String> {
 
-	    private ProgressDialog progressDialog;
 	    @Override
 	    protected void onPreExecute() {
-	        progressDialog = new ProgressDialog(MainActivity.this);
-	        progressDialog.setMessage("Uploading...");
-	        progressDialog.setCancelable(false);
-	        progressDialog.setIndeterminate(true);
-	        progressDialog.show();
+	        progress.setVisibility(View.VISIBLE);
 	        super.onPreExecute();
 	    }
 
 	    @Override
 	    protected String doInBackground(String... params) {
-	        HttpClient httpclient = new DefaultHttpClient();
-	        HttpPost httppost = new HttpPost(
-	                "http://yourwebsite.com/commit.php");
-
-	        try {
-	            // Add your data
-	            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-	            nameValuePairs
-	                    .add(new BasicNameValuePair("username", params[0]));
-
-	            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-	            // Execute HTTP Post Request
-	            HttpResponse response = httpclient.execute(httppost);
-	            if (response != null) {
-	                InputStream in = response.getEntity().getContent();
-	                String responseContent = inputStreamToString(in);
-
-	                return responseContent;
+			try {
+				statuses = mTwitter.search(new Query(searchText.getText().toString())).getTweets();
+	            int i = 1;
+	            for (twitter4j.Status s : statuses) {
+	                User tweet = s.getUser();
+	                String user_pic = tweet.getProfileImageURL();
+	                
+	                listIDS.add(new String[] {tweet.getName(), tweet.getScreenName()});
+					
+					mCursor.addRow(new Object[] {
+							i++,
+							user_pic,
+							tweet.getName(),
+							s.getText()
+					});
 	            }
-	        } catch (ClientProtocolException e) {
-	            e.printStackTrace();
-	        } catch (IOException e) {
-	            e.printStackTrace();
+	        } catch (Exception e) {
+	        	mCursor.addRow(new Object[] {"Twitter query failed: " + e.toString()});
 	        }
+			adapter = new MyCursorAdapter(context, mCursor);
 
 	        return null;
 	    }
 
 	    @Override
 	    protected void onPostExecute(String result) {
-	        if (progressDialog != null) {
-	            progressDialog.dismiss();
-	        }
+	        lv.setAdapter(adapter);
+	        progress.setVisibility(View.GONE);
 	        // process the result
 	        super.onPostExecute(result);
-	    }
-
-	    private String inputStreamToString(InputStream is) throws IOException {
-	        String line = "";
-	        StringBuilder total = new StringBuilder();
-
-	        // Wrap a BufferedReader around the InputStream
-	        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-
-	        // Read response until the end
-	        while ((line = rd.readLine()) != null) { 
-	            total.append(line); 
-	        }
-
-	        // Return full string
-	        return total.toString();
 	    }
 	}
 }

@@ -40,10 +40,6 @@ public class MyCursorAdapter extends CursorAdapter {
 		{
 			pic.setImageDrawable(GetImageFromWeb(cursor.getString(cursor.getColumnIndex("pic"))));
 		}
-		else
-		{
-			pic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),mContext.getResources().getIdentifier(mContext.getApplicationContext().getPackageName()+":drawable/ic_launcher" , null, null)));
-		}
 		
 		TextView user_id = (TextView)view.findViewById(R.id.user_id);
 		user_id.setText(cursor.getString(cursor.getColumnIndex("user_id")));
@@ -67,5 +63,4 @@ public class MyCursorAdapter extends CursorAdapter {
 	        return null;
 	    }
 	}
-
 }

@@ -62,6 +62,7 @@
                     android:visibility="gone"
                     android:background="@drawable/cancel"/>
             </RelativeLayout>
+            
             <Button 
                 android:id="@+id/search"
                 android:layout_width="30dp"
@@ -71,7 +72,14 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/forward_dark"/>
         </RelativeLayout>
-
+        
+        <ProgressBar 
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
         <ListView
             android:id="@+id/list"
             android:layout_width="fill_parent"
