@@ -36,17 +36,19 @@ public final class R {
         public static final int forward_light=0x7f020002;
         public static final int ic_launcher=0x7f020003;
         public static final int list_item=0x7f020004;
-        public static final int profile_image=0x7f020005;
-        public static final int search_icon=0x7f020006;
-        public static final int searchbar=0x7f020007;
+        public static final int menu=0x7f020005;
+        public static final int profile_image=0x7f020006;
+        public static final int search_icon=0x7f020007;
+        public static final int searchbar=0x7f020008;
     }
     public static final class id {
         public static final int label=0x7f090002;
         public static final int label2=0x7f090004;
-        public static final int list=0x7f09000a;
-        public static final int menu_webpage=0x7f09000b;
+        public static final int list=0x7f09000b;
+        public static final int menu_btn=0x7f090009;
+        public static final int menu_webpage=0x7f09000c;
         public static final int pic=0x7f090000;
-        public static final int progress=0x7f090009;
+        public static final int progress=0x7f09000a;
         public static final int search=0x7f090005;
         public static final int searchCancel=0x7f090008;
         public static final int searchIcon=0x7f090006;

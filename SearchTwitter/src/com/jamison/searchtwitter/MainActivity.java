@@ -31,10 +31,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -61,6 +63,7 @@ public class MainActivity extends Activity {
 	String columnData = "";
 	
 	private EditText searchText=null;
+	private Button menuBtn=null;
 	private Button searchBtn=null;
 	private Button cancelBtn=null;
 	private ProgressBar progress=null;
@@ -99,6 +102,17 @@ public class MainActivity extends Activity {
             	 }
              }
  		});
+ 		searchText.setOnKeyListener(new OnKeyListener() {
+ 		    @Override
+ 		    public boolean onKey(View v, int keyCode, KeyEvent event) {
+ 		        if (event.getAction()!=KeyEvent.ACTION_DOWN)
+ 		            return false;
+ 		        if(keyCode == KeyEvent.KEYCODE_ENTER ){
+ 		        	searchBtn.performClick();
+ 		            return true;
+ 		        }
+ 		        return false;
+ 		    }});
         
 		cancelBtn = (Button) findViewById(R.id.searchCancel);
 		cancelBtn.setOnClickListener(new OnClickListener(){
@@ -139,6 +153,14 @@ public class MainActivity extends Activity {
 				startActivity( new Intent( Intent.ACTION_VIEW, uri ) );
 			}
 		});
+		
+		menuBtn = (Button) findViewById(R.id.menu_btn);
+		menuBtn.setOnClickListener(new OnClickListener(){
+	    	public void onClick(View view){
+	    		openOptionsMenu();
+	    	}
+	    }
+	    );
 	}
 	
 	private Twitter getTwitter() {
